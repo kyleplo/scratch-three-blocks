@@ -2,7 +2,7 @@ var ScratchBlocks = {};
 ScratchBlocks.init = function (){
 fetch("https://kyleplo.github.io/scratch-three-blocks/blockdata.json").then(function (r){ScratchBlocks.data = r.json()})
 };
-ScratchBlocks.parse(text){
+ScratchBlocks.parse = function(text){
 var alpha = "qwertyuiopasdfghjklzxcvbnm";
 var lines = text.split(/[\n\r]{1,}/g);
 var input = 0;
@@ -16,9 +16,11 @@ var thisLine = [];
 for(var x = 0;x < chars.length;x++)
 if(chars[x] === " " && input === 0){thisLine.push(word);word = ""}
 else if(alpha.indexOf(chars[x].toLowerCase()) > -1){
-words += chars[x].toLowerCase()}
+word += chars[x].toLowerCase()}
 else if(chars[x] === "(" || chars[x] === "[" || chars[x] === "<"){
-input++;if(chars[x] === "<"){inputType = "bool"}else{inputType = "strnum"}
+input++;if(chars[x] === "<"){inputType = "bool"}else{inputType = "strnum"}}
+else if(chars[x] === ")" || chars[x] === "]" || chars[x] === ">"){thisLine.push({type: inputType, value: word});inputType = null;word = "";input--};
+result.push(thisLine)
 }
-}
+  return result
 }
